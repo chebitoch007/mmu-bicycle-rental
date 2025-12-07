@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .cost-display {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #198754;
+    }
+    .timer {
+        font-size: 2rem;
+        font-family: monospace;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if rental %}
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <!-- Active Rental Header -->
+            <div class="card shadow-lg border-warning mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0">
+                        <i class="bi bi-bicycle"></i> Active Rental
+                        <span class="badge bg-success float-end">In Progress</span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <!-- Bicycle Info -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            {% if rental.bicycle.image %}
+                            <img src="{{ rental.bicycle.image.url }}" class="img-fluid rounded" alt="{{ rental.bicycle.name }}">
+                            {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 150px;">
+                                <i class="bi bi-bicycle text-muted" style="font-size: 4rem;"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <h4>{{ rental.bicycle.name }}</h4>
+                            <p class="text-muted">{{ rental.bicycle.model }} - {{ rental.bicycle.serial_number }}</p>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-geo-alt"></i> <strong>Pickup:</strong> {{ rental.pickup_station.name }}</li>
+                                <li><i class="bi bi-clock"></i> <strong>Started:</strong> {{ rental.start_time|date:"F d, Y g:i A" }}</li>
+                                <li><i class="bi bi-cash-coin"></i> <strong>Rate:</strong> KES {{ rental.hourly_rate }}/hour</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Timer and Cost -->
+                    <div class="row text-center mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">DURATION</h6>
+                                    <div class="timer" id="duration-timer">
+                                        {{ rental.duration_hours|floatformat:1 }} hours
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">CURRENT COST</h6>
+                                    <div class="cost-display">
+                                        KES <span id="current-cost">{{ current_cost|floatformat:2 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Warning if overdue -->
+                    {% if rental.is_overdue %}
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <strong>Warning:</strong> This rental is overdue! Please return the bicycle immediately to avoid additional penalties.
+                        Late fees are being applied at 50% per hour after 24 hours.
+                    </div>
+                    {% endif %}
+
+                    <!-- Guidelines -->
+                    <div class="alert alert-info">
+                        <h6><i class="bi bi-info-circle"></i> Rental Guidelines:</h6>
+                        <ul class="mb-0">
+                            <li>Return the bicycle to any available station</li>
+                            <li>Rentals over 24 hours incur late fees</li>
+                            <li>Report any issues immediately</li>
+                            <li>Ensure the bicycle is locked properly when parking</li>
+                        </ul>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'rentals:return' %}" class="btn btn-danger btn-lg">
+                            <i class="bi bi-stop-circle"></i> Return Bicycle
+                        </a>
+                        <a href="{% url 'bicycles:detail' rental.bicycle.slug %}" class="btn btn-outline-primary">
+                            <i class="bi bi-info-circle"></i> Bicycle Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-inbox text-muted" style="font-size: 5rem;"></i>
+        <h3 class="mt-3">No Active Rental</h3>
+        <p class="text-muted mb-4">You don't have any active rentals at the moment.</p>
+        <a href="{% url 'bicycles:list' %}" class="btn btn-primary">
+            <i class="bi bi-bicycle"></i> Browse Bicycles
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% if rental %}
+<script>
+    // Auto-refresh cost every minute
+    setInterval(function() {
+        location.reload();
+    }, 60000);
+</script>
+{% endif %}
+{% endblock %}

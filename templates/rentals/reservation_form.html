@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<style>
+    .countdown {
+        font-size: 2.5rem;
+        font-family: monospace;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-lg border-info">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">
+                        <i class="bi bi-bookmark-fill"></i> Bicycle Reserved
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if reservation.is_active %}
+                    <!-- Active Reservation -->
+                    <div class="alert alert-success text-center">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <h4 class="mb-0">Reservation Confirmed!</h4>
+                    </div>
+
+                    <!-- Countdown Timer -->
+                    <div class="text-center mb-4">
+                        <p class="text-muted mb-2">Time Remaining</p>
+                        <div class="countdown text-danger" id="countdown">
+                            Loading...
+                        </div>
+                        <small class="text-muted">Reservation expires at {{ reservation.expires_at|date:"g:i A" }}</small>
+                    </div>
+
+                    <!-- Bicycle Info -->
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <h5>{{ reservation.bicycle.name }}</h5>
+                            <p class="text-muted mb-2">{{ reservation.bicycle.model }} - {{ reservation.bicycle.serial_number }}</p>
+                            <hr>
+                            <p class="mb-1"><i class="bi bi-geo-alt"></i> <strong>Pickup Location:</strong> {{ reservation.station.name }}</p>
+                            <p class="mb-1"><i class="bi bi-map"></i> {{ reservation.station.address }}</p>
+                            <p class="mb-0"><i class="bi bi-cash-coin"></i> <strong>Rate:</strong> KES {{ reservation.bicycle.hourly_rate }}/hour</p>
+                        </div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="alert alert-warning">
+                        <h6><i class="bi bi-exclamation-triangle-fill"></i> Important Instructions:</h6>
+                        <ol class="mb-0">
+                            <li>Arrive at {{ reservation.station.name }} within 30 minutes</li>
+                            <li>Bring your University ID for verification</li>
+                            <li>Start your rental by clicking "Start Rental" button below</li>
+                            <li>If you don't pick up in time, this reservation will expire automatically</li>
+                        </ol>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2">
+                        {% if can_pick_up %}
+                        <form method="post" action="{% url 'rentals:start' reservation.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success btn-lg w-100">
+                                <i class="bi bi-play-circle-fill"></i> Start Rental
+                            </button>
+                        </form>
+                        {% endif %}
+                        
+                        <form method="post" action="{% url 'rentals:reservation-cancel' reservation.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to cancel this reservation?')">
+                                <i class="bi bi-x-circle"></i> Cancel Reservation
+                            </button>
+                        </form>
+
+                        {% if reservation.station.latitude and reservation.station.longitude %}
+                        <a href="{{ reservation.station.get_location_url }}" target="_blank" class="btn btn-outline-primary">
+                            <i class="bi bi-map"></i> Get Directions
+                        </a>
+                        {% endif %}
+                    </div>
+
+                    {% else %}
+                    <!-- Expired/Cancelled Reservation -->
+                    <div class="alert alert-danger text-center">
+                        <i class="bi bi-x-circle-fill"></i>
+                        <h4 class="mb-0">
+                            Reservation {{ reservation.get_status_display }}
+                        </h4>
+                        <p class="mb-0 mt-2">This reservation is no longer active.</p>
+                    </div>
+                    <div class="d-grid">
+                        <a href="{% url 'bicycles:list' %}" class="btn btn-primary">
+                            <i class="bi bi-bicycle"></i> Browse Bicycles
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if reservation.is_active %}
+<script>
+// Countdown timer
+function updateCountdown() {
+    fetch("{% url 'rentals:reservation-status' reservation.id %}")
+        .then(response => response.json())
+        .then(data => {
+            if (data.is_active) {
+                const minutes = Math.floor(data.time_remaining / 60);
+                const seconds = Math.floor(data.time_remaining % 60);
+                document.getElementById('countdown').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (data.time_remaining <= 0) {
+                    location.reload();
+                }
+            } else {
+                location.reload();
+            }
+        });
+}
+
+// Update every second
+setInterval(updateCountdown, 1000);
+updateCountdown();
+</script>
+{% endif %}
+{% endblock %}

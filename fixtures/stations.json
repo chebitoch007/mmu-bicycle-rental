@@ -1,0 +1,62 @@
+[
+    {
+      "model": "stations.station",
+      "pk": 1,
+      "fields": {
+        "name": "Main Library Station",
+        "code": "LIB",
+        "description": "Located at the main university library entrance",
+        "address": "MMU Main Library, Rift Valley Rd, Nairobi",
+        "latitude": "-1.2245",
+        "longitude": "36.8874",
+        "capacity": 15,
+        "is_active": true,
+        "operating_hours": "6:00 AM - 10:00 PM"
+      }
+    },
+    {
+      "model": "stations.station",
+      "pk": 2,
+      "fields": {
+        "name": "Engineering Block Station",
+        "code": "ENG",
+        "description": "Near the Engineering and Technology building",
+        "address": "MMU Engineering Block, Rift Valley Rd, Nairobi",
+        "latitude": "-1.2250",
+        "longitude": "36.8880",
+        "capacity": 12,
+        "is_active": true,
+        "operating_hours": "6:00 AM - 10:00 PM"
+      }
+    },
+    {
+      "model": "stations.station",
+      "pk": 3,
+      "fields": {
+        "name": "Student Center Station",
+        "code": "SC",
+        "description": "At the student center near the cafeteria",
+        "address": "MMU Student Center, Rift Valley Rd, Nairobi",
+        "latitude": "-1.2240",
+        "longitude": "36.8870",
+        "capacity": 20,
+        "is_active": true,
+        "operating_hours": "24/7"
+      }
+    },
+    {
+      "model": "stations.station",
+      "pk": 4,
+      "fields": {
+        "name": "Hostels Station",
+        "code": "HOST",
+        "description": "Near student hostels area",
+        "address": "MMU Hostels, Rift Valley Rd, Nairobi",
+        "latitude": "-1.2235",
+        "longitude": "36.8865",
+        "capacity": 10,
+        "is_active": true,
+        "operating_hours": "24/7"
+      }
+    }
+  ]

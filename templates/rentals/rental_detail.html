@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'rentals:history' %}">Rental History</a></li>
+            <li class="breadcrumb-item active">Rental #{{ rental.id }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-receipt"></i> Rental Receipt #{{ rental.id }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Status -->
+                    <div class="text-center mb-4">
+                        {% if rental.status == 'completed' %}
+                        <span class="badge bg-success fs-4">Completed</span>
+                        {% elif rental.status == 'active' %}
+                        <span class="badge bg-warning text-dark fs-4">Active</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Bicycle Info -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            {% if rental.bicycle.image %}
+                            <img src="{{ rental.bicycle.image.url }}" class="img-fluid rounded" alt="{{ rental.bicycle.name }}">
+                            {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 150px;">
+                                <i class="bi bi-bicycle text-muted" style="font-size: 4rem;"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <h5>{{ rental.bicycle.name }}</h5>
+                            <p class="text-muted">{{ rental.bicycle.model }} - {{ rental.bicycle.serial_number }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Rental Details -->
+                    <h5 class="border-bottom pb-2 mb-3">Rental Details</h5>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p class="text-muted mb-1">Pickup Station</p>
+                            <p class="fw-bold">{{ rental.pickup_station.name }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-muted mb-1">Return Station</p>
+                            <p class="fw-bold">{{ rental.return_station.name|default:"N/A" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p class="text-muted mb-1">Start Time</p>
+                            <p class="fw-bold">{{ rental.start_time|date:"F d, Y g:i A" }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-muted mb-1">End Time</p>
+                            <p class="fw-bold">{{ rental.end_time|date:"F d, Y g:i A"|default:"Ongoing" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <p class="text-muted mb-1">Duration</p>
+                            <p class="fw-bold">{{ rental.duration_hours|floatformat:2 }} hours</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-muted mb-1">Distance</p>
+                            <p class="fw-bold">{{ rental.distance_km }} km</p>
+                        </div>
+                    </div>
+
+                    <!-- Cost Breakdown -->
+                    <h5 class="border-bottom pb-2 mb-3">Cost Breakdown</h5>
+                    <table class="table table-borderless">
+                        <tr>
+                            <td>Hourly Rate</td>
+                            <td class="text-end">KES {{ rental.hourly_rate }}</td>
+                        </tr>
+                        <tr>
+                            <td>Duration</td>
+                            <td class="text-end">{{ rental.duration_hours|floatformat:2 }} hours</td>
+                        </tr>
+                        <tr>
+                            <td>Base Cost</td>
+                            <td class="text-end">KES {{ rental.hourly_rate|floatformat:2 }} × {{ rental.duration_hours|floatformat:2 }}</td>
+                        </tr>
+                        {% if rental.late_fee > 0 %}
+                        <tr class="text-danger">
+                            <td>Late Fee</td>
+                            <td class="text-end">KES {{ rental.late_fee }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if rental.damage_fee > 0 %}
+                        <tr class="text-danger">
+                            <td>Damage Fee</td>
+                            <td class="text-end">KES {{ rental.damage_fee }}</td>
+                        </tr>
+                        {% endif %}
+                        <tr class="fw-bold fs-5 border-top">
+                            <td>Total Cost</td>
+                            <td class="text-end text-primary">KES {{ rental.total_cost }}</td>
+                        </tr>
+                    </table>
+
+                    <!-- Notes -->
+                    {% if rental.return_notes %}
+                    <h5 class="border-bottom pb-2 mb-3">Notes</h5>
+                    <div class="alert alert-light">
+                        {{ rental.return_notes }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Actions -->
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="{% url 'rentals:history' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Back to History
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

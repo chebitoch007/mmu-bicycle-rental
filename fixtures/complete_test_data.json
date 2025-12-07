@@ -1,0 +1,380 @@
+[
+    {
+      "model": "stations.station",
+      "pk": 1,
+      "fields": {
+        "name": "Main Library Station",
+        "code": "LIB",
+        "description": "Located at the main university library entrance",
+        "address": "MMU Main Library, Rift Valley Rd, Nairobi",
+        "latitude": "-1.2245",
+        "longitude": "36.8874",
+        "capacity": 15,
+        "is_active": true,
+        "operating_hours": "6:00 AM - 10:00 PM"
+      }
+    },
+    {
+      "model": "stations.station",
+      "pk": 2,
+      "fields": {
+        "name": "Engineering Block Station",
+        "code": "ENG",
+        "description": "Near the Engineering and Technology building",
+        "address": "MMU Engineering Block, Rift Valley Rd, Nairobi",
+        "latitude": "-1.2250",
+        "longitude": "36.8880",
+        "capacity": 12,
+        "is_active": true,
+        "operating_hours": "6:00 AM - 10:00 PM"
+      }
+    },
+    {
+      "model": "stations.station",
+      "pk": 3,
+      "fields": {
+        "name": "Student Center Station",
+        "code": "SC",
+        "description": "At the student center near the cafeteria",
+        "address": "MMU Student Center, Rift Valley Rd, Nairobi",
+        "latitude": "-1.2240",
+        "longitude": "36.8870",
+        "capacity": 20,
+        "is_active": true,
+        "operating_hours": "24/7"
+      }
+    },
+    {
+      "model": "stations.station",
+      "pk": 4,
+      "fields": {
+        "name": "Hostels Station",
+        "code": "HOST",
+        "description": "Near student hostels area",
+        "address": "MMU Hostels, Rift Valley Rd, Nairobi",
+        "latitude": "-1.2235",
+        "longitude": "36.8865",
+        "capacity": 10,
+        "is_active": true,
+        "operating_hours": "24/7"
+      }
+    },
+    {
+      "model": "accounts.user",
+      "pk": 2,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$test$1234567890abcdefghijklmnopqrstuvwxyz==",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "john_student",
+        "first_name": "John",
+        "last_name": "Kamau",
+        "email": "john.kamau@students.mmu.ac.ke",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-01-15T10:00:00Z",
+        "role": "student",
+        "phone_number": "+254712345678",
+        "university_id": "STU/12345",
+        "is_verified": true,
+        "is_active_renter": true,
+        "penalties": 0
+      }
+    },
+    {
+      "model": "accounts.user",
+      "pk": 3,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$test$1234567890abcdefghijklmnopqrstuvwxyz==",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "mary_student",
+        "first_name": "Mary",
+        "last_name": "Wanjiku",
+        "email": "mary.wanjiku@students.mmu.ac.ke",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-01-20T10:00:00Z",
+        "role": "student",
+        "phone_number": "+254723456789",
+        "university_id": "STU/12346",
+        "is_verified": true,
+        "is_active_renter": true,
+        "penalties": 0
+      }
+    },
+    {
+      "model": "accounts.user",
+      "pk": 4,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$test$1234567890abcdefghijklmnopqrstuvwxyz==",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "dr_omondi",
+        "first_name": "David",
+        "last_name": "Omondi",
+        "email": "d.omondi@mmu.ac.ke",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-01-10T10:00:00Z",
+        "role": "staff",
+        "phone_number": "+254734567890",
+        "university_id": "STF/67890",
+        "is_verified": true,
+        "is_active_renter": true,
+        "penalties": 0
+      }
+    },
+    {
+      "model": "accounts.user",
+      "pk": 5,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$test$1234567890abcdefghijklmnopqrstuvwxyz==",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "peter_pending",
+        "first_name": "Peter",
+        "last_name": "Mwangi",
+        "email": "peter.mwangi@students.mmu.ac.ke",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-12-01T10:00:00Z",
+        "role": "student",
+        "phone_number": "+254745678901",
+        "university_id": "STU/12347",
+        "is_verified": false,
+        "is_active_renter": false,
+        "penalties": 0
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 1,
+      "fields": {
+        "name": "Mountain Cruiser Pro",
+        "model": "Trek X-Caliber 8",
+        "manufacturer": "Trek",
+        "serial_number": "TRK2024001",
+        "slug": "mountain-cruiser-pro-trk2024001",
+        "description": "High-performance mountain bike perfect for campus trails",
+        "frame_size": "M",
+        "color": "Red",
+        "gear_count": 21,
+        "hourly_rate": "50.00",
+        "status": "available",
+        "condition": "excellent",
+        "current_station": 1,
+        "total_rentals": 15,
+        "total_distance_km": "234.50",
+        "purchase_date": "2024-01-01",
+        "purchase_price": "45000.00"
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 2,
+      "fields": {
+        "name": "City Comfort Bike",
+        "model": "Giant Escape 3",
+        "manufacturer": "Giant",
+        "serial_number": "GNT2024002",
+        "slug": "city-comfort-bike-gnt2024002",
+        "description": "Comfortable city bike for smooth campus rides",
+        "frame_size": "L",
+        "color": "Blue",
+        "gear_count": 7,
+        "hourly_rate": "40.00",
+        "status": "available",
+        "condition": "good",
+        "current_station": 1,
+        "total_rentals": 23,
+        "total_distance_km": "456.20",
+        "purchase_date": "2024-01-05",
+        "purchase_price": "35000.00"
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 3,
+      "fields": {
+        "name": "Speed Racer",
+        "model": "Specialized Allez",
+        "manufacturer": "Specialized",
+        "serial_number": "SPC2024003",
+        "slug": "speed-racer-spc2024003",
+        "description": "Fast road bike for quick campus commutes",
+        "frame_size": "M",
+        "color": "Black",
+        "gear_count": 18,
+        "hourly_rate": "60.00",
+        "status": "available",
+        "condition": "excellent",
+        "current_station": 2,
+        "total_rentals": 8,
+        "total_distance_km": "123.40",
+        "purchase_date": "2024-02-01",
+        "purchase_price": "55000.00"
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 4,
+      "fields": {
+        "name": "Campus Cruiser",
+        "model": "Schwinn Discover",
+        "manufacturer": "Schwinn",
+        "serial_number": "SCH2024004",
+        "slug": "campus-cruiser-sch2024004",
+        "description": "Classic cruiser perfect for leisurely campus rides",
+        "frame_size": "M",
+        "color": "Green",
+        "gear_count": 7,
+        "hourly_rate": "35.00",
+        "status": "available",
+        "condition": "good",
+        "current_station": 2,
+        "total_rentals": 31,
+        "total_distance_km": "567.80",
+        "purchase_date": "2023-11-15",
+        "purchase_price": "28000.00"
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 5,
+      "fields": {
+        "name": "Trail Blazer",
+        "model": "Cannondale Trail 5",
+        "manufacturer": "Cannondale",
+        "serial_number": "CND2024005",
+        "slug": "trail-blazer-cnd2024005",
+        "description": "Versatile mountain bike for all terrains",
+        "frame_size": "L",
+        "color": "Orange",
+        "gear_count": 24,
+        "hourly_rate": "55.00",
+        "status": "available",
+        "condition": "excellent",
+        "current_station": 3,
+        "total_rentals": 12,
+        "total_distance_km": "189.30",
+        "purchase_date": "2024-02-15",
+        "purchase_price": "48000.00"
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 6,
+      "fields": {
+        "name": "Urban Explorer",
+        "model": "Trek FX 2",
+        "manufacturer": "Trek",
+        "serial_number": "TRK2024006",
+        "slug": "urban-explorer-trk2024006",
+        "description": "Hybrid bike perfect for campus and city riding",
+        "frame_size": "M",
+        "color": "Silver",
+        "gear_count": 9,
+        "hourly_rate": "45.00",
+        "status": "in-use",
+        "condition": "good",
+        "current_station": 3,
+        "total_rentals": 19,
+        "total_distance_km": "298.60",
+        "purchase_date": "2024-01-20",
+        "purchase_price": "38000.00"
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 7,
+      "fields": {
+        "name": "Easy Rider",
+        "model": "Giant Sedona DX",
+        "manufacturer": "Giant",
+        "serial_number": "GNT2024007",
+        "slug": "easy-rider-gnt2024007",
+        "description": "Comfortable bike for relaxed campus touring",
+        "frame_size": "L",
+        "color": "Brown",
+        "gear_count": 21,
+        "hourly_rate": "40.00",
+        "status": "available",
+        "condition": "fair",
+        "current_station": 4,
+        "total_rentals": 42,
+        "total_distance_km": "789.20",
+        "purchase_date": "2023-09-01",
+        "purchase_price": "32000.00"
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 8,
+      "fields": {
+        "name": "Quick Commuter",
+        "model": "Raleigh Cadent 2",
+        "manufacturer": "Raleigh",
+        "serial_number": "RAL2024008",
+        "slug": "quick-commuter-ral2024008",
+        "description": "Fast and efficient for daily commutes",
+        "frame_size": "M",
+        "color": "White",
+        "gear_count": 16,
+        "hourly_rate": "50.00",
+        "status": "maintenance",
+        "condition": "good",
+        "current_station": 4,
+        "total_rentals": 27,
+        "total_distance_km": "423.10",
+        "purchase_date": "2024-01-10",
+        "purchase_price": "40000.00"
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 9,
+      "fields": {
+        "name": "Campus Classic",
+        "model": "Schwinn Wayfarer",
+        "manufacturer": "Schwinn",
+        "serial_number": "SCH2024009",
+        "slug": "campus-classic-sch2024009",
+        "description": "Retro-style bike with modern features",
+        "frame_size": "M",
+        "color": "Cream",
+        "gear_count": 7,
+        "hourly_rate": "45.00",
+        "status": "available",
+        "condition": "excellent",
+        "current_station": 1,
+        "total_rentals": 5,
+        "total_distance_km": "67.80",
+        "purchase_date": "2024-03-01",
+        "purchase_price": "36000.00"
+      }
+    },
+    {
+      "model": "bicycles.bicycle",
+      "pk": 10,
+      "fields": {
+        "name": "Sport Tourer",
+        "model": "Trek Domane AL 2",
+        "manufacturer": "Trek",
+        "serial_number": "TRK2024010",
+        "slug": "sport-tourer-trk2024010",
+        "description": "Sporty touring bike for longer rides",
+        "frame_size": "L",
+        "color": "Navy Blue",
+        "gear_count": 16,
+        "hourly_rate": "55.00",
+        "status": "available",
+        "condition": "excellent",
+        "current_station": 2,
+        "total_rentals": 11,
+        "total_distance_km": "167.50",
+        "purchase_date": "2024-02-20",
+        "purchase_price": "50000.00"
+      }
+    }
+  ]

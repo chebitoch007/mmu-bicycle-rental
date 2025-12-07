@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #198754; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f8f9fa; }
+        .rental-details { background-color: white; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .info { background-color: #d1ecf1; padding: 15px; border-left: 4px solid #0dcaf0; margin: 15px 0; }
+        .button { display: inline-block; padding: 12px 24px; background-color: #198754; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+        .footer { text-align: center; padding: 20px; color: #6c757d; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚴 Rental Started!</h1>
+        </div>
+        
+        <div class="content">
+            <h2>Enjoy Your Ride, {{ rental.user.first_name }}!</h2>
+            <p>Your bicycle rental has started successfully.</p>
+            
+            <div class="rental-details">
+                <h3>Rental Information:</h3>
+                <p><strong>Bicycle:</strong> {{ rental.bicycle.name }} - {{ rental.bicycle.model }}</p>
+                <p><strong>Serial Number:</strong> {{ rental.bicycle.serial_number }}</p>
+                <p><strong>Pickup Station:</strong> {{ rental.pickup_station.name }}</p>
+                <p><strong>Start Time:</strong> {{ rental.start_time|date:"F d, Y g:i A" }}</p>
+                <p><strong>Hourly Rate:</strong> KES {{ rental.hourly_rate }}</p>
+            </div>
+            
+            <div class="info">
+                <strong>ℹ️ Rental Guidelines:</strong>
+                <ul>
+                    <li>Return the bicycle to any station when done</li>
+                    <li>Rentals over 24 hours incur late fees (50% per hour)</li>
+                    <li>Report any issues immediately</li>
+                    <li>Always lock the bicycle when parked</li>
+                </ul>
+            </div>
+            
+            <a href="{{ site_url }}/rentals/active/" class="button">View Active Rental</a>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated email from {{ site_name }}.</p>
+            <p>For support, contact us at support@mmu.ac.ke</p>
+        </div>
+    </div>
+</body>
+</html>

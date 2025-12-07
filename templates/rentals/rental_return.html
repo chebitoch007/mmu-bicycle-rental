@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-stop-circle"></i> Return Bicycle
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Current Rental Info -->
+                    <div class="alert alert-info">
+                        <h6><i class="bi bi-info-circle"></i> Current Rental</h6>
+                        <p class="mb-1"><strong>Bicycle:</strong> {{ rental.bicycle.name }} - {{ rental.bicycle.model }}</p>
+                        <p class="mb-1"><strong>Started:</strong> {{ rental.start_time|date:"F d, Y g:i A" }}</p>
+                        <p class="mb-0"><strong>Duration:</strong> {{ rental.duration_hours|floatformat:2 }} hours</p>
+                    </div>
+
+                    <!-- Cost Estimate -->
+                    <div class="card bg-light mb-4">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">Estimated Total Cost</h6>
+                            <h2 class="text-primary mb-0">KES {{ estimated_cost|floatformat:2 }}</h2>
+                            {% if rental.is_overdue %}
+                            <small class="text-danger">
+                                <i class="bi bi-exclamation-triangle"></i> 
+                                Late fees applied
+                            </small>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Return Form -->
+                    <form method="post" id="return-form">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <strong>Please note:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Inspect the bicycle for any damage before returning</li>
+                                <li>Report any issues in the notes below</li>
+                                <li>Make sure the bicycle is properly locked at the station</li>
+                                <li>Your account will be charged the displayed amount</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'rentals:active' %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Confirm bicycle return? This action cannot be undone.')">
+                                <i class="bi bi-check-circle"></i> Confirm Return
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

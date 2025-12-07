@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-3 fw-bold mb-3">Ride Smart on Campus</h1>
+                <p class="lead mb-4">
+                    Rent bicycles easily across MMU campus. Affordable, eco-friendly, and convenient transportation for students and staff.
+                </p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'bicycles:list' %}" class="btn btn-light btn-lg">
+                        <i class="bi bi-bicycle"></i> Browse Bicycles
+                    </a>
+                {% else %}
+                    <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg me-2">
+                        Get Started
+                    </a>
+                    <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-lg">
+                        Login
+                    </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="bi bi-bicycle display-1"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container my-5">
+    <div class="row text-center mb-5">
+        <div class="col">
+            <h2 class="fw-bold">Why Choose Our Service?</h2>
+            <p class="text-muted">Fast, reliable, and affordable bicycle rentals</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-lightning-charge-fill text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Quick Reservations</h5>
+                    <p class="card-text">Reserve a bicycle in seconds with our easy online system. Pick up within 30 minutes.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-cash-coin text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Affordable Rates</h5>
+                    <p class="card-text">Starting from just KES 50/hour. Special rates for students and staff members.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-geo-alt-fill text-danger" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Multiple Stations</h5>
+                    <p class="card-text">Pick up and return at any of our convenient stations across the MMU campus.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col">
+                <h2 class="fw-bold">How It Works</h2>
+                <p class="text-muted">Get riding in 4 easy steps</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 60px; height: 60px;">
+                        <h3 class="mb-0">1</h3>
+                    </div>
+                    <h5>Register</h5>
+                    <p class="text-muted">Create your account with your MMU ID</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 60px; height: 60px;">
+                        <h3 class="mb-0">2</h3>
+                    </div>
+                    <h5>Choose</h5>
+                    <p class="text-muted">Browse and select an available bicycle</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 60px; height: 60px;">
+                        <h3 class="mb-0">3</h3>
+                    </div>
+                    <h5>Reserve</h5>
+                    <p class="text-muted">Reserve and pick up from the station</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 60px; height: 60px;">
+                        <h3 class="mb-0">4</h3>
+                    </div>
+                    <h5>Ride</h5>
+                    <p class="text-muted">Enjoy your ride and return when done</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+{% if not user.is_authenticated %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="fw-bold mb-3">Ready to Start Riding?</h2>
+            <p class="lead mb-4">Join hundreds of MMU students and staff who choose eco-friendly transportation</p>
+            <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg">
+                Register Now <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

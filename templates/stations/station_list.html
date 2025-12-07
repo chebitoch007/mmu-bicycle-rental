@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2><i class="bi bi-geo-alt-fill"></i> Bicycle Stations</h2>
+    <p class="text-muted">Find bicycle rental stations across MMU campus</p>
+
+    <div class="row g-4 mt-3">
+        {% for station in stations %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-building"></i> {{ station.name }}
+                        <span class="badge bg-primary">{{ station.code }}</span>
+                    </h5>
+                    
+                    <p class="text-muted">{{ station.description }}</p>
+                    
+                    <hr>
+                    
+                    <p class="mb-2">
+                        <i class="bi bi-geo-alt"></i> {{ station.address }}
+                    </p>
+                    <p class="mb-2">
+                        <i class="bi bi-clock"></i> {{ station.operating_hours }}
+                    </p>
+                    
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Available Bikes:</span>
+                            <h4 class="text-success mb-0">{{ station.available_bikes_count }}</h4>
+                        </div>
+                        <div class="progress mt-2" style="height: 10px;">
+                            <div class="progress-bar {% if station.occupancy_rate < 50 %}bg-success{% elif station.occupancy_rate < 80 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                 style="width: {{ station.occupancy_rate }}%"></div>
+                        </div>
+                        <small class="text-muted">{{ station.total_bikes_count }} / {{ station.capacity }} capacity</small>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-3">
+                        {% if station.latitude and station.longitude %}
+                        <a href="{{ station.get_location_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-map"></i> Get Directions
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'stations:detail' station.id %}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-eye"></i> View Bicycles
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle"></i> No stations available at the moment.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

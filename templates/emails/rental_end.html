@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #0dcaf0; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f8f9fa; }
+        .rental-summary { background-color: white; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .total-cost { background-color: #d1e7dd; padding: 20px; text-align: center; font-size: 24px; font-weight: bold; color: #0f5132; margin: 15px 0; border-radius: 5px; }
+        .footer { text-align: center; padding: 20px; color: #6c757d; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Rental Completed</h1>
+        </div>
+        
+        <div class="content">
+            <h2>Thank You, {{ rental.user.first_name }}!</h2>
+            <p>Your bicycle rental has been completed successfully.</p>
+            
+            <div class="rental-summary">
+                <h3>Rental Summary:</h3>
+                <p><strong>Bicycle:</strong> {{ rental.bicycle.name }}</p>
+                <p><strong>Pickup Station:</strong> {{ rental.pickup_station.name }}</p>
+                <p><strong>Return Station:</strong> {{ rental.return_station.name }}</p>
+                <p><strong>Start Time:</strong> {{ rental.start_time|date:"F d, Y g:i A" }}</p>
+                <p><strong>End Time:</strong> {{ rental.end_time|date:"F d, Y g:i A" }}</p>
+                <p><strong>Duration:</strong> {{ rental.duration_hours|floatformat:2 }} hours</p>
+                <p><strong>Distance:</strong> {{ rental.distance_km }} km</p>
+                <hr>
+                <p><strong>Hourly Rate:</strong> KES {{ rental.hourly_rate }}</p>
+                {% if rental.late_fee > 0 %}
+                <p style="color: #dc3545;"><strong>Late Fee:</strong> KES {{ rental.late_fee }}</p>
+                {% endif %}
+                {% if rental.damage_fee > 0 %}
+                <p style="color: #dc3545;"><strong>Damage Fee:</strong> KES {{ rental.damage_fee }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="total-cost">
+                Total Cost: KES {{ rental.total_cost }}
+            </div>
+            
+            <p style="text-align: center;">We hope you enjoyed your ride! 🚲</p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated email from {{ site_name }}.</p>
+            <p>For support or billing inquiries, contact us at support@mmu.ac.ke</p>
+        </div>
+    </div>
+</body>
+</html>

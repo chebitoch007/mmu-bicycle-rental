@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Profile Sidebar -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    {% if profile_user.profile_picture %}
+                    <img src="{{ profile_user.profile_picture.url }}" alt="Profile" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                    <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px; font-size: 4rem;">
+                        {{ profile_user.first_name.0 }}{{ profile_user.last_name.0 }}
+                    </div>
+                    {% endif %}
+                    
+                    <h4>{{ profile_user.get_full_name }}</h4>
+                    <p class="text-muted">@{{ profile_user.username }}</p>
+                    
+                    {% if profile_user.role == 'student' %}
+                    <span class="badge bg-primary mb-2">
+                    {% else %}
+                    <span class="badge bg-success mb-2">
+                    {% endif %}
+                        {{ profile_user.get_role_display }}
+                    </span>
+                    
+                    {% if profile_user.is_verified %}
+                    <span class="badge bg-success mb-2">
+                        <i class="bi bi-check-circle"></i> Verified
+                    </span>
+                    {% else %}
+                    <span class="badge bg-warning mb-2">
+                        <i class="bi bi-clock"></i> Pending Verification
+                    </span>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="{% url 'accounts:profile-edit' %}" class="btn btn-primary">
+                            <i class="bi bi-pencil"></i> Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Status -->
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    <h6 class="card-title">Account Status</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success"></i>
+                            <strong>Active Renter:</strong> 
+                            {% if profile_user.is_active_renter %}
+                            <span class="text-success">Yes</span>
+                            {% else %}
+                            <span class="text-danger">Suspended</span>
+                            {% endif %}
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-exclamation-triangle text-warning"></i>
+                            <strong>Penalties:</strong> {{ profile_user.penalties }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-bicycle text-primary"></i>
+                            <strong>Total Rentals:</strong> {{ total_rentals }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="col-md-8">
+            <!-- Contact Information -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-person-circle"></i> Contact Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">Email</label>
+                            <p class="mb-0">{{ profile_user.email }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">Phone</label>
+                            <p class="mb-0">{{ profile_user.phone_number|default:"Not provided" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">University ID</label>
+                            <p class="mb-0">{{ profile_user.university_id }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">Date Joined</label>
+                            <p class="mb-0">{{ profile_user.created_at|date:"F d, Y" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Rental -->
+            {% if active_rental %}
+            <div class="card shadow mb-4 border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-bicycle"></i> Active Rental</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6>{{ active_rental.bicycle.name }} - {{ active_rental.bicycle.model }}</h6>
+                            <p class="mb-1"><strong>Started:</strong> {{ active_rental.start_time|date:"F d, Y g:i A" }}</p>
+                            <p class="mb-1"><strong>Duration:</strong> {{ active_rental.duration_hours|floatformat:1 }} hours</p>
+                            <p class="mb-0"><strong>Current Cost:</strong> KES {{ active_rental.calculate_cost|floatformat:2 }}</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a href="{% url 'rentals:active' %}" class="btn btn-warning">
+                                <i class="bi bi-eye"></i> View Details
+                            </a>
+                            <a href="{% url 'rentals:return' %}" class="btn btn-danger mt-2">
+                                <i class="bi bi-stop-circle"></i> Return Bicycle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Recent Rentals -->
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Rentals</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_rentals %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Bicycle</th>
+                                    <th>Date</th>
+                                    <th>Duration</th>
+                                    <th>Cost</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rental in recent_rentals %}
+                                <tr>
+                                    <td>{{ rental.bicycle.name }}</td>
+                                    <td>{{ rental.start_time|date:"M d, Y" }}</td>
+                                    <td>{{ rental.duration_hours|floatformat:1 }}h</td>
+                                    <td>KES {{ rental.total_cost }}</td>
+                                    <td>
+                                        <a href="{% url 'rentals:detail' rental.id %}" class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'rentals:history' %}" class="btn btn-outline-primary">
+                            View All Rentals <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center mb-0">No rental history yet. <a href="{% url 'bicycles:list' %}">Browse bicycles</a> to get started!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

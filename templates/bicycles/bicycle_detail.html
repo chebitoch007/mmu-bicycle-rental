@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'bicycles:list' %}">Bicycles</a></li>
+            <li class="breadcrumb-item active">{{ bicycle.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Bicycle Image -->
+        <div class="col-md-6 mb-4">
+            {% if bicycle.image %}
+            <img src="{{ bicycle.image.url }}" class="img-fluid rounded shadow" alt="{{ bicycle.name }}">
+            {% else %}
+            <div class="bg-light rounded shadow d-flex align-items-center justify-content-center" style="height: 400px;">
+                <i class="bi bi-bicycle text-muted" style="font-size: 8rem;"></i>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Bicycle Details -->
+        <div class="col-md-6">
+            <h1>{{ bicycle.name }}</h1>
+            <p class="lead text-muted">{{ bicycle.model }}</p>
+
+            <!-- Status -->
+            <div class="mb-3">
+                {% if bicycle.status == 'available' %}
+                <span class="badge bg-success fs-6">Available Now</span>
+                {% elif bicycle.status == 'in-use' %}
+                <span class="badge bg-warning text-dark fs-6">Currently In Use</span>
+                {% elif bicycle.status == 'reserved' %}
+                <span class="badge bg-info fs-6">Reserved</span>
+                {% elif bicycle.status == 'maintenance' %}
+                <span class="badge bg-danger fs-6">Under Maintenance</span>
+                {% endif %}
+            </div>
+
+            <!-- Pricing -->
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h3 class="text-primary mb-0">KES {{ bicycle.hourly_rate }}<small class="text-muted">/hour</small></h3>
+                    <small class="text-muted">Daily rate: KES {{ bicycle.get_daily_rate }}</small>
+                </div>
+            </div>
+
+            <!-- Specifications -->
+            <h5 class="mb-3">Specifications</h5>
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><i class="bi bi-gear"></i> Gears</span>
+                    <strong>{{ bicycle.gear_count }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><i class="bi bi-rulers"></i> Frame Size</span>
+                    <strong>{{ bicycle.frame_size|default:"Standard" }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><i class="bi bi-palette"></i> Color</span>
+                    <strong>{{ bicycle.color|default:"N/A" }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><i class="bi bi-award"></i> Condition</span>
+                    <strong class="text-capitalize">{{ bicycle.get_condition_display }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><i class="bi bi-geo-alt"></i> Location</span>
+                    <strong>{{ bicycle.current_station.name }}</strong>
+                </li>
+            </ul>
+
+            <!-- Description -->
+            {% if bicycle.description %}
+            <h5 class="mb-3">Description</h5>
+            <p>{{ bicycle.description }}</p>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 mb-3">
+                {% if can_reserve %}
+                <form method="post" action="{% url 'rentals:reserve' bicycle.slug %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-bookmark-fill"></i> Reserve This Bicycle
+                    </button>
+                </form>
+                {% elif not user.is_verified %}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> Your account needs verification before you can rent bicycles.
+                </div>
+                {% elif user.has_active_rental %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> You already have an active rental. 
+                    <a href="{% url 'rentals:active' %}" class="alert-link">View it here</a>.
+                </div>
+                {% elif user.has_active_reservation %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> You already have an active reservation. 
+                    <a href="{% url 'rentals:reservation-active' %}" class="alert-link">View it here</a>.
+                </div>
+                {% elif not bicycle.is_available %}
+                <button class="btn btn-secondary btn-lg w-100" disabled>
+                    <i class="bi bi-x-circle"></i> Not Available
+                </button>
+                {% endif %}
+
+                {% if user.is_staff %}
+                <hr>
+                <a href="{% url 'bicycles:update' bicycle.slug %}" class="btn btn-outline-primary">
+                    <i class="bi bi-pencil"></i> Edit Bicycle
+                </a>
+                <a href="{% url 'bicycles:delete' bicycle.slug %}" class="btn btn-outline-danger">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Stats -->
+            <div class="row text-center">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="text-primary">{{ bicycle.total_rentals }}</h4>
+                            <small class="text-muted">Total Rentals</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="text-success">{{ bicycle.total_distance_km }} km</h4>
+                            <small class="text-muted">Distance</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Rentals -->
+    {% if recent_rentals %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h4>Recent Rentals</h4>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Date</th>
+                            <th>Duration</th>
+                            <th>Station</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rental in recent_rentals %}
+                        <tr>
+                            <td>{{ rental.user.get_full_name }}</td>
+                            <td>{{ rental.start_time|date:"M d, Y" }}</td>
+                            <td>{{ rental.duration_hours|floatformat:1 }}h</td>
+                            <td>{{ rental.pickup_station.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
